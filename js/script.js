@@ -5,9 +5,6 @@ const fetchData = async (url) => {
     const response = await fetch(url);
     const data = await response.json();
     displayEmployees(data.results);
-
-    const birthDate = new Date(data.results[0].dob.date).getMonth();
-    console.log(birthDate);
     createModal();
   } catch (error) {}
 };
@@ -18,20 +15,35 @@ const displayEmployees = (employees) => {
     const employeeHTML = `
       <div class="card">
         <div class="card-img-container">
-          <img class="card-img" src="${employee.picture.large}" alt="profile picture">
+          <img class="card-img" src="${
+            employee.picture.large
+          }" alt="profile picture">
         </div>
 
         <div class="card-info-container">
-          <h3 id="name" class="card-name cap">${employee.name.first} ${employee.name.last}</h3>
+          <h3 id="name" class="card-name cap">${employee.name.first} ${
+      employee.name.last
+    }</h3>
           <p class="card-text card-email">${employee.email}</p>
-          <p class="card-text card-city cap">${employee.location.city}, ${employee.location.state}</p>
+          <p class="card-text card-city cap">${employee.location.city}, ${
+      employee.location.state
+    }</p>
+          <p class="cell" hidden>${employee.cell}</p>
+          <p class="address" hidden>${createAddress(employee.location)}</p>
+          <p class="birthday" hidden>${createBirthDate(employee.dob.date)}</p>
+          
         </div>
       </div>
     `;
     gallery.insertAdjacentHTML("beforeend", employeeHTML);
-    const birthday = createBirthDate(employee.dob.date);
+    // const birthday = createBirthDate(employee.dob.date);
+    // const phoneNumber = employee;
   });
 };
+
+function createAddress(location) {
+  return `${location.street.number} ${location.street.name}, ${location.city}, ${location.state} ${location.postcode}`;
+}
 
 function createBirthDate(birthDate) {
   const month = new Date(birthDate).getMonth();
@@ -44,7 +56,7 @@ function createModal() {
   const cards = document.querySelectorAll(".card");
   for (const card of cards) {
     card.addEventListener("click", (e) => {
-      console.log("modal");
+      console.log(e.currentTarget.id);
       const imageContainer = card.querySelector(".card-img-container");
       const infoContainer = card.querySelector(".card-info-container");
       const modal = `
@@ -67,9 +79,15 @@ function createModal() {
               infoContainer.querySelector("p.card-city").textContent
             }</p>
             <hr>
-            <p class="modal-text">(555) 555-5555</p>
-            <p class="modal-text">123 Portland Ave., Portland, OR 97204</p>
-            <p class="modal-text">Birthday: 10/21/2015</p>
+            <p class="modal-text">${
+              infoContainer.querySelector("p.cell").textContent
+            }</p>
+            <p class="modal-text">${
+              infoContainer.querySelector("p.address").textContent
+            }</p>
+            <p class="modal-text">Birthday: ${
+              infoContainer.querySelector("p.birthday").textContent
+            }</p>
           </div>
         </div>
     </div>
@@ -79,4 +97,4 @@ function createModal() {
   }
 }
 
-fetchData("https://randomuser.me/api/?results=12");
+fetchData("https://randomuser.me/api/?results=12&nat=CA");

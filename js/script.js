@@ -36,13 +36,12 @@ const displayEmployees = (employees) => {
       </div>
     `;
     gallery.insertAdjacentHTML("beforeend", employeeHTML);
-    // const birthday = createBirthDate(employee.dob.date);
-    // const phoneNumber = employee;
   });
 };
 
 function createAddress(location) {
-  return `${location.street.number} ${location.street.name}, ${location.city}, ${location.state} ${location.postcode}`;
+  return `${location.street.number} ${location.street.name}, 
+  ${location.city}, ${location.state} ${location.postcode}`;
 }
 
 function createBirthDate(birthDate) {
@@ -56,7 +55,6 @@ function createModal() {
   const cards = document.querySelectorAll(".card");
   for (const card of cards) {
     card.addEventListener("click", (e) => {
-      console.log(e.currentTarget.id);
       const imageContainer = card.querySelector(".card-img-container");
       const infoContainer = card.querySelector(".card-info-container");
       const modal = `
@@ -93,8 +91,16 @@ function createModal() {
     </div>
       `;
       gallery.insertAdjacentHTML("afterend", modal);
+      hideModal();
     });
   }
 }
+
+const hideModal = () => {
+  const closeBtn = document.getElementById("modal-close-btn");
+  closeBtn.addEventListener("click", (e) => {
+    document.querySelector(".modal-container").remove();
+  });
+};
 
 fetchData("https://randomuser.me/api/?results=12&nat=CA");

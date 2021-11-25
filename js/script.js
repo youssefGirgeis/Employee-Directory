@@ -4,12 +4,15 @@ const fetchData = async (url) => {
   try {
     const response = await fetch(url);
     const data = await response.json();
-    displayEmployee(data.results);
+    displayEmployees(data.results);
+
+    const birthDate = new Date(data.results[0].dob.date).getMonth();
+    console.log(birthDate);
     createModal();
   } catch (error) {}
 };
 
-const displayEmployee = (employees) => {
+const displayEmployees = (employees) => {
   console.log(employees);
   employees.forEach((employee) => {
     const employeeHTML = `
@@ -26,8 +29,16 @@ const displayEmployee = (employees) => {
       </div>
     `;
     gallery.insertAdjacentHTML("beforeend", employeeHTML);
+    const birthday = createBirthDate(employee.dob.date);
   });
 };
+
+function createBirthDate(birthDate) {
+  const month = new Date(birthDate).getMonth();
+  const day = new Date(birthDate).getDate();
+  const year = new Date(birthDate).getFullYear();
+  return `${month}/${day}/${year}`;
+}
 
 function createModal() {
   const cards = document.querySelectorAll(".card");
@@ -39,22 +50,27 @@ function createModal() {
       const modal = `
       <div class="modal-container">
         <div class="modal">
-          <img class="modal-img" src="${
-            imageContainer.querySelector("img").src
-          }" alt="profile picture">
-          <h3 id="name" class="modal-name cap">${
-            infoContainer.querySelector("h3.card-name").textContent
-          }</h3>
-          <p class="modal-text">${
-            infoContainer.querySelector("p.card-email").textContent
-          }</p>
-          <p class="modal-text cap">${
-            infoContainer.querySelector("p.card-city").textContent
-          }</p>
-          <hr>
-          <p class="modal-text">(555) 555-5555</p>
-          <p class="modal-text">123 Portland Ave., Portland, OR 97204</p>
-          <p class="modal-text">Birthday: 10/21/2015</p>
+          <button type="button" id="modal-close-btn" class="modal-close-btn">
+          <strong>X</strong>
+          </button>
+          <div class="modal-info-container">
+            <img class="modal-img" src="${
+              imageContainer.querySelector("img").src
+            }" alt="profile picture">
+            <h3 id="name" class="modal-name cap">${
+              infoContainer.querySelector("h3.card-name").textContent
+            }</h3>
+            <p class="modal-text">${
+              infoContainer.querySelector("p.card-email").textContent
+            }</p>
+            <p class="modal-text cap">${
+              infoContainer.querySelector("p.card-city").textContent
+            }</p>
+            <hr>
+            <p class="modal-text">(555) 555-5555</p>
+            <p class="modal-text">123 Portland Ave., Portland, OR 97204</p>
+            <p class="modal-text">Birthday: 10/21/2015</p>
+          </div>
         </div>
     </div>
       `;

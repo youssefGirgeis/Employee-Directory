@@ -1,4 +1,22 @@
 const gallery = document.getElementById("gallery");
+const searchContainer = document.querySelector(".search-container");
+
+const createSearch = () => {
+  const searchFormHtml = `
+  <form action="#" method="get">
+    <input type="search" id="search-input" class="search-input" placeholder="Search...">
+    <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
+  </form>
+  `;
+  searchContainer.insertAdjacentHTML("beforeend", searchFormHtml);
+};
+
+{
+  /* <form action="#" method="get">
+<input type="search" id="search-input" class="search-input" placeholder="Search...">
+<input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
+</form> */
+}
 
 const fetchData = async (url) => {
   try {
@@ -103,4 +121,5 @@ const hideModal = () => {
   });
 };
 
+createSearch();
 fetchData("https://randomuser.me/api/?results=12&nat=CA");

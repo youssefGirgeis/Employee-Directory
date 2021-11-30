@@ -11,13 +11,6 @@ const createSearch = () => {
   searchContainer.insertAdjacentHTML("beforeend", searchFormHtml);
 };
 
-{
-  /* <form action="#" method="get">
-<input type="search" id="search-input" class="search-input" placeholder="Search...">
-<input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
-</form> */
-}
-
 const fetchData = async (url) => {
   try {
     const response = await fetch(url);
@@ -28,7 +21,6 @@ const fetchData = async (url) => {
 };
 
 const displayEmployees = (employees) => {
-  console.log(employees);
   employees.forEach((employee) => {
     const employeeHTML = `
       <div class="card">
@@ -121,5 +113,28 @@ const hideModal = () => {
   });
 };
 
+const search = (e) => {
+  console.log(e.target);
+  const cards = document.querySelectorAll(".card");
+  for (const card of cards) {
+    const infoContainer = card.querySelector(".card-info-container");
+    const employeeName = infoContainer
+      .querySelector("h3.card-name")
+      .textContent.toLowerCase();
+    if (
+      employeeName.includes(searchInput.value.toLowerCase()) ||
+      searchInput.value === ""
+    ) {
+      card.style.display = "inherit";
+    } else {
+      card.style.display = "none";
+    }
+  }
+};
+
 createSearch();
 fetchData("https://randomuser.me/api/?results=12&nat=CA");
+
+const searchInput = document.getElementById("search-input");
+searchInput.addEventListener("click", search);
+searchInput.addEventListener("keyup", search);
